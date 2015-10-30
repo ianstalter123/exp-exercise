@@ -1,10 +1,11 @@
 var express = require("express"),
 app = express(),
+favicon = require('serve-favicon'),
 bodyParser = require("body-parser"),
 methodOverride = require('method-override'),
 morgan = require("morgan")
 db = require("./models");
-favicon = require('serve-favicon');
+
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
