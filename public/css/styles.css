@@ -1,0 +1,7 @@
+.completed {
+	text-decoration: line-through;
+}
+.form-control {
+	width:50%;
+	margin:auto;
+}
