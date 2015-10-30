@@ -26,7 +26,6 @@ app.controller('TodoCtrl', function($scope,$http) {
 				data: {name:task},
 				headers: {'Content-Type': 'application/json'}})
 			.success(function(data) {
-				
 				console.log(data)
 			})
 			.error(function(data) {
