@@ -2,6 +2,9 @@
 	font-size: 20px;
 	font-family: Times;
 }
+.editBox{
+	width:50%;
+}
 .completed {
 	text-decoration: line-through;
 }
@@ -18,4 +21,3 @@ ul{
 .btn-default{
 	font-size: 20px
 }
-
