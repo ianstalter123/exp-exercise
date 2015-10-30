@@ -2,11 +2,20 @@ app.controller('TodoCtrl', function($scope,$http) {
 
 	$scope.taskError=false;
 	$scope.isActive = false;
+	$scope.completed = 0;
 
 	$http.get('/todos')
+
 	.success(function(data) {
 		$scope.todos = data;
 		console.log(data)
+
+		for(var i = 0; i < $scope.todos.length; i++){
+			if($scope.todos[i].completed == 'true'){
+			$scope.completed += 1;
+		}
+	}
+
 	})
 	.error(function(data) {
 		console.log('Error: ' + data);
@@ -40,11 +49,18 @@ app.controller('TodoCtrl', function($scope,$http) {
 	}
 
 	$scope.toggleCompleted = function(task){
+		$scope.completed = 0;
 		console.log(task);
 		if(task.completed == 'true'){
 			task.completed = 'false';
 		}else{
 			task.completed = 'true';
+		}
+
+		for(var i = 0; i < $scope.todos.length; i++){
+			if($scope.todos[i].completed == 'true'){
+			$scope.completed += 1;
+		}
 		}
 		
 		console.log(task.completed)
