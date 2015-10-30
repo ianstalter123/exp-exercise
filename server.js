@@ -4,8 +4,8 @@ bodyParser = require("body-parser"),
 methodOverride = require('method-override'),
 morgan = require("morgan")
 db = require("./models");
-
-
+favicon = require('serve-favicon');
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
