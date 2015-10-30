@@ -64,6 +64,6 @@ app.use('/', apiRouter);
 
 PORT = 3001
 
-app.listen(PORT,function(){
+app.listen(process.env.PORT || PORT,function(){
   console.log("this server is running on", PORT)
 });
