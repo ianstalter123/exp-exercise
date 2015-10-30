@@ -11,8 +11,11 @@
 	font-size: 20px;
 }
 
+ul{
+	margin-top:15px;
+}
+
 .btn-default{
-	maring-bottom: 15px;
 	font-size: 20px
 }
 

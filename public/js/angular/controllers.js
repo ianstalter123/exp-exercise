@@ -5,15 +5,21 @@ app.controller('TodoCtrl', function($scope,$http) {
 
 	$http.get('/todos')
 
+
+
 	.success(function(data) {
 		$scope.todos = data;
 		console.log(data)
 
+		for(var i=0; i < $scope.todos.length; i++){
+			$scope.todos[i].editBox = false;
+		}
+
 		for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
-			$scope.completed += 1;
+				$scope.completed += 1;
+			}
 		}
-	}
 
 	})
 	.error(function(data) {
@@ -25,7 +31,6 @@ app.controller('TodoCtrl', function($scope,$http) {
 		if(task){
 			$scope.taskError=false;
 			console.log(task)
-			//$scope.todos.push({name:task});
 			$scope.task.name = "";
 
 			$http({
@@ -54,17 +59,53 @@ app.controller('TodoCtrl', function($scope,$http) {
 
 		for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
-			$scope.completed += 1;
-		}
+				$scope.completed += 1;
+			}
 		}
 		
 		$http({
+			url: "/todos/" + task._id,
+			method: "PUT",
+			data: {completed:task.completed, name:task.name},
+			headers: {'Content-Type': 'application/json'}})
+		.success(function(data) {
+
+			console.log(data)
+		})
+		.error(function(data) {
+			console.log('Error: ' + data);
+			$scope.taskError=true;
+		});
+	}
+	
+
+	$scope.remove = function(task){
+		$scope.todos = $scope.todos.filter(function(returnableObjects){
+			return returnableObjects._id !== task._id;
+		});
+		$http.delete('/todos/' + task._id)
+		.success(function (data) {
+
+		})
+		.error(function (data) {
+
+		});
+	}
+
+
+
+	$scope.edit = function(index,task){
+		console.log('edit time')
+		$scope.todos[index].editBox = !$scope.todos[index].editBox;
+		if($scope.todos[index].editBox === false){
+			console.log('falsed it');
+			$http({
 				url: "/todos/" + task._id,
 				method: "PUT",
 				data: {completed:task.completed, name:task.name},
 				headers: {'Content-Type': 'application/json'}})
 			.success(function(data) {
-				
+
 				console.log(data)
 			})
 			.error(function(data) {
@@ -72,26 +113,6 @@ app.controller('TodoCtrl', function($scope,$http) {
 				$scope.taskError=true;
 			});
 		}
-	
-
-	$scope.remove = function(task){
-		 $scope.todos = $scope.todos.filter(function(returnableObjects){
-               return returnableObjects._id !== task._id;
-        });
-		 $http.delete('/todos/' + task._id)
-            .success(function (data) {
-                
-            })
-            .error(function (data) {
-                
-            });
 	}
-
-
-
-	$scope.edit = function(task){
-		 console.log('edit time')
-
-}
 })
 
