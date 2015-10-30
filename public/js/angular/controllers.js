@@ -17,7 +17,7 @@ app.controller('TodoCtrl', function($scope,$http) {
 		if(task){
 			$scope.taskError=false;
 			console.log(task)
-			$scope.todos.push({name:task});
+			//$scope.todos.push({name:task});
 			$scope.task.name = "";
 
 			$http({
@@ -26,7 +26,7 @@ app.controller('TodoCtrl', function($scope,$http) {
 				data: {name:task},
 				headers: {'Content-Type': 'application/json'}})
 			.success(function(data) {
-				console.log(data)
+				$scope.todos = data;
 			})
 			.error(function(data) {
 				console.log('Error: ' + data);
