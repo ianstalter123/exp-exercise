@@ -1,11 +1,18 @@
+*{
+	font-size: 20px;
+	font-family: Times;
+}
 .completed {
 	text-decoration: line-through;
 }
 .form-control {
 	width:50%;
 	margin:auto;
+	font-size: 20px;
 }
 
 .btn-default{
 	maring-bottom: 15px;
+	font-size: 20px
 }
+
