@@ -1,7 +1,6 @@
 app.controller('TodoCtrl', function($scope,$http) {
 
 	$scope.taskError=false;
-	$scope.isActive = false;
 	$scope.completed = 0;
 
 	$http.get('/todos')
@@ -50,12 +49,8 @@ app.controller('TodoCtrl', function($scope,$http) {
 
 	$scope.toggleCompleted = function(task){
 		$scope.completed = 0;
-		console.log(task);
-		if(task.completed == 'true'){
-			task.completed = 'false';
-		}else{
-			task.completed = 'true';
-		}
+		
+		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
 
 		for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
@@ -63,7 +58,6 @@ app.controller('TodoCtrl', function($scope,$http) {
 		}
 		}
 		
-		console.log(task.completed)
 		$http({
 				url: "/todos/" + task._id,
 				method: "PUT",
@@ -86,11 +80,18 @@ app.controller('TodoCtrl', function($scope,$http) {
         });
 		 $http.delete('/todos/' + task._id)
             .success(function (data) {
-                console.log(data);
+                
             })
             .error(function (data) {
-                console.log(data);
+                
             });
 	}
+
+
+
+	$scope.edit = function(task){
+		 console.log('edit time')
+
+}
 })
 
