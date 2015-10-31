@@ -40,9 +40,8 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		$scope.completed = 0;
 		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
 		countComplete();
-		task.$update(function() {
-           	$scope.todos = Todo.query();
-        });
+		task.$update();
+		$scope.todos = Todo.query();
 		
 
 	}
@@ -61,9 +60,8 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		$scope.todos[index].editBox = !$scope.todos[index].editBox;
 		if($scope.todos[index].editBox === false){
 			console.log('falsed it');
-			task.$update(function() {
-           	$scope.todos = Todo.query();
-        });
+			task.$update();
+			$scope.todos = Todo.query();
 		}
 	}
 
