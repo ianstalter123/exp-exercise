@@ -1,1 +1,1 @@
-var app = angular.module('TodoApp', ['720kb.tooltips'])
+var app = angular.module('TodoApp', ['720kb.tooltips','ngResource'])

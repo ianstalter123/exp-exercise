@@ -13,6 +13,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json({}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', function(req,res){
   res.render('index');
@@ -24,9 +25,7 @@ apiRouter.route('/todos')
 .post(function(req,res){
   db.Todo.create(req.body,function(error){
     if (error) return res.json({error:error.message})
-    db.Todo.find({},function(error,response){
-    res.json(response);
-  })
+   
 })
 })
 .get(function(req,res){

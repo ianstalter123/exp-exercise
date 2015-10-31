@@ -1,50 +1,34 @@
-app.controller('TodoCtrl', function($scope,$http) {
+app.controller('TodoCtrl', function($scope,$http,Todo) {
 
-	$scope.taskError=false;
-	$scope.completed = 0;
-
-	$http.get('/todos')
-
-
-
-	.success(function(data) {
-		$scope.todos = data;
-		console.log(data)
-
-		for(var i=0; i < $scope.todos.length; i++){
-			$scope.todos[i].editBox = false;
-		}
-
-		for(var i = 0; i < $scope.todos.length; i++){
+		var countComplete = function(){
+			for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
 				$scope.completed += 1;
 			}
 		}
+	}
 
-	})
-	.error(function(data) {
-		console.log('Error: ' + data);
+	$scope.taskError=false;
+	$scope.completed = 0;
+	$scope.todos = Todo.query();
+	$scope.todos.$promise.then(function () {
+  	countComplete();
 	});
+
+		for(var i=0; i < $scope.todos.length; i++){
+			$scope.todos[i].editBox = false;
+		}
+		
 
 	$scope.createTask = function(task){
 
 		if(task){
 			$scope.taskError=false;
-			console.log(task)
+			var todo = new Todo({name: task})
+			todo.$save();
+			$scope.todos = Todo.query();
 			$scope.task.name = "";
-
-			$http({
-				url: "/todos",
-				method: "POST",
-				data: {name:task},
-				headers: {'Content-Type': 'application/json'}})
-			.success(function(data) {
-				$scope.todos = data;
-			})
-			.error(function(data) {
-				console.log('Error: ' + data);
-				$scope.taskError=true;
-			});
+			
 		}
 		else {
 			$scope.taskError=true;
@@ -54,42 +38,20 @@ app.controller('TodoCtrl', function($scope,$http) {
 
 	$scope.toggleCompleted = function(task){
 		$scope.completed = 0;
-		
 		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
-
-		for(var i = 0; i < $scope.todos.length; i++){
-			if($scope.todos[i].completed == 'true'){
-				$scope.completed += 1;
-			}
-		}
+		countComplete();
+		task.$update(function() {
+           	$scope.todos = Todo.query();
+        });
 		
-		$http({
-			url: "/todos/" + task._id,
-			method: "PUT",
-			data: {completed:task.completed, name:task.name},
-			headers: {'Content-Type': 'application/json'}})
-		.success(function(data) {
 
-			console.log(data)
-		})
-		.error(function(data) {
-			console.log('Error: ' + data);
-			$scope.taskError=true;
-		});
 	}
-	
 
 	$scope.remove = function(task){
 		$scope.todos = $scope.todos.filter(function(returnableObjects){
 			return returnableObjects._id !== task._id;
 		});
-		$http.delete('/todos/' + task._id)
-		.success(function (data) {
-
-		})
-		.error(function (data) {
-
-		});
+		task.$delete();
 	}
 
 
@@ -99,20 +61,12 @@ app.controller('TodoCtrl', function($scope,$http) {
 		$scope.todos[index].editBox = !$scope.todos[index].editBox;
 		if($scope.todos[index].editBox === false){
 			console.log('falsed it');
-			$http({
-				url: "/todos/" + task._id,
-				method: "PUT",
-				data: {completed:task.completed, name:task.name},
-				headers: {'Content-Type': 'application/json'}})
-			.success(function(data) {
-
-				console.log(data)
-			})
-			.error(function(data) {
-				console.log('Error: ' + data);
-				$scope.taskError=true;
-			});
+			task.$update(function() {
+           	$scope.todos = Todo.query();
+        });
 		}
 	}
+
+	
 })
 
