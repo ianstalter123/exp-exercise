@@ -1,6 +1,6 @@
 app.controller('TodoCtrl', function($scope,$http,Todo) {
 
-		var countComplete = function(){
+		var checkComplete = function(){
 			for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
 				$scope.completed += 1;
@@ -12,7 +12,7 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 	$scope.completed = 0;
 	$scope.todos = Todo.query();
 	$scope.todos.$promise.then(function () {
-  	countComplete();
+  	checkComplete();
 	});
 
 		for(var i=0; i < $scope.todos.length; i++){
@@ -25,10 +25,9 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		if(task){
 			$scope.taskError=false;
 			var todo = new Todo({name: task})
-			todo.$save();
-			$scope.todos = Todo.query();
+			todo.$save()
 			$scope.task.name = "";
-			
+			$scope.todos = Todo.query();
 		}
 		else {
 			$scope.taskError=true;
@@ -39,9 +38,10 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 	$scope.toggleCompleted = function(task){
 		$scope.completed = 0;
 		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
-		countComplete();
-		task.$update();
-		$scope.todos = Todo.query();
+		checkComplete();
+		task.$update().then(function(task){
+          $scope.todos = Todo.query();
+        });
 		
 
 	}
@@ -60,8 +60,9 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		$scope.todos[index].editBox = !$scope.todos[index].editBox;
 		if($scope.todos[index].editBox === false){
 			console.log('falsed it');
-			task.$update();
-			$scope.todos = Todo.query();
+			task.$update().then(function(task){
+          $scope.todos = Todo.query();
+        });
 		}
 	}
 
