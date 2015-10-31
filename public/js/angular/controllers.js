@@ -30,7 +30,7 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 
 		if(task){
 			$scope.taskError=false;
-			var todo = new Todo({name: task});
+			var todo = new Todo({name: task, completed: 'false'});
 			todo.$save();
 			$scope.todos = Todo.query();
 			$scope.task.name = "";
