@@ -25,7 +25,6 @@ apiRouter.route('/todos')
 .post(function(req,res){
   db.Todo.create(req.body,function(error){
     if (error) return res.json({error:error.message})
-   
 })
 })
 .get(function(req,res){
@@ -49,7 +48,6 @@ apiRouter.route('/todos/:todoId')
     todo.completed = req.body.completed
     todo.save(function(err){
       if (err) res.send(err);
-      res.json({message:'Todo updated!'})
     })
   })
 })

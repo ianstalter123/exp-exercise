@@ -1,7 +1,13 @@
 app.controller('TodoCtrl', function($scope,$http,Todo) {
 
-		var checkComplete = function(){
-			for(var i = 0; i < $scope.todos.length; i++){
+	$scope.updateTodos = function () {
+		Todo.query( function( data ) {
+			$scope.todos = data;
+		});
+	};
+
+	var checkComplete = function(){
+		for(var i = 0; i < $scope.todos.length; i++){
 			if($scope.todos[i].completed == 'true'){
 				$scope.completed += 1;
 			}
@@ -12,22 +18,23 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 	$scope.completed = 0;
 	$scope.todos = Todo.query();
 	$scope.todos.$promise.then(function () {
-  	checkComplete();
+		checkComplete();
 	});
 
-		for(var i=0; i < $scope.todos.length; i++){
-			$scope.todos[i].editBox = false;
-		}
-		
+	for(var i=0; i < $scope.todos.length; i++){
+		$scope.todos[i].editBox = false;
+	}
+
 
 	$scope.createTask = function(task){
 
 		if(task){
 			$scope.taskError=false;
-			var todo = new Todo({name: task})
-			todo.$save()
-			$scope.task.name = "";
+			var todo = new Todo({name: task});
+			todo.$save();
 			$scope.todos = Todo.query();
+			$scope.task.name = "";
+			
 		}
 		else {
 			$scope.taskError=true;
@@ -39,9 +46,9 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		$scope.completed = 0;
 		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
 		checkComplete();
-		task.$update().then(function(task){
-          $scope.todos = Todo.query();
-        });
+		task.$update( function() {
+      $scope.updateTodos();
+    });
 		
 
 	}
@@ -60,9 +67,9 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		$scope.todos[index].editBox = !$scope.todos[index].editBox;
 		if($scope.todos[index].editBox === false){
 			console.log('falsed it');
-			task.$update().then(function(task){
-          $scope.todos = Todo.query();
-        });
+			task.$update( function() {
+      $scope.updateTodos();
+    });
 		}
 	}
 
