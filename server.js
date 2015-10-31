@@ -25,6 +25,9 @@ apiRouter.route('/todos')
 .post(function(req,res){
   db.Todo.create(req.body,function(error){
     if (error) return res.json({error:error.message})
+      db.Todo.find({},function(error,response){
+    res.json(response);
+  })
 })
 })
 .get(function(req,res){

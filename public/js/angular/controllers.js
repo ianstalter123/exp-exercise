@@ -30,11 +30,21 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 
 		if(task){
 			$scope.taskError=false;
-			var todo = new Todo({name: task, completed: 'false'});
-			todo.$save();
-			$scope.todos = Todo.query();
-			$scope.task.name = "";
-			
+			console.log(task)
+
+			$http({
+				url: "/todos",
+				method: "POST",
+				data: {name:task.name,completed:'false'},
+				headers: {'Content-Type': 'application/json'}})
+			.success(function(data) {
+				$scope.todos = Todo.query();
+				$scope.task.name = "";
+			})
+			.error(function(data) {
+				console.log('Error: ' + data);
+				$scope.taskError=true;
+			});
 		}
 		else {
 			$scope.taskError=true;
@@ -47,8 +57,8 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		task.completed == 'true' ? task.completed = 'false' : task.completed = 'true';
 		checkComplete();
 		task.$update( function() {
-      $scope.updateTodos();
-    });
+			$scope.updateTodos();
+		});
 		
 
 	}
@@ -68,8 +78,8 @@ app.controller('TodoCtrl', function($scope,$http,Todo) {
 		if($scope.todos[index].editBox === false){
 			console.log('falsed it');
 			task.$update( function() {
-      $scope.updateTodos();
-    });
+				$scope.updateTodos();
+			});
 		}
 	}
 
